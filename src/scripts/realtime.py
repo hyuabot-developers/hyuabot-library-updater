@@ -27,6 +27,5 @@ async def get_realtime_data(db_session: Session) -> None:
                 ))
     db_session.execute(delete(ReadingRoom))
     if room_items:
-        insert_statement = insert(ReadingRoom).values(room_items)
-        db_session.execute(insert_statement)
+        db_session.execute(insert(ReadingRoom), room_items)
     db_session.commit()

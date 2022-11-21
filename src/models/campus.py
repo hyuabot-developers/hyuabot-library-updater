@@ -1,10 +1,10 @@
-from sqlalchemy import Column
-from sqlalchemy.sql import sqltypes
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
 
 from models import BaseModel
 
 
 class Campus(BaseModel):
     __tablename__ = "campus"
-    campus_id = Column(sqltypes.Integer, primary_key=True)
-    campus_name = Column(sqltypes.String, nullable=False)
+    campus_id: Mapped[int] = mapped_column(primary_key=True)
+    campus_name: Mapped[str] = mapped_column(String(30))

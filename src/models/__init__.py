@@ -1,13 +1,5 @@
-from typing import Any
-
-from sqlalchemy import Table, MetaData
-from sqlalchemy.ext.declarative import declarative_base
-
-ModelMeta: Any = declarative_base()
+from sqlalchemy.orm import DeclarativeBase
 
 
-class BaseModel(ModelMeta):
-    __abstract__ = True
-
-    __table__: Table
-    metadata: MetaData
+class BaseModel(DeclarativeBase):
+    pass
