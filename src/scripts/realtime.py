@@ -6,7 +6,7 @@ from models.reading_room import ReadingRoom
 
 
 async def get_realtime_data(db_session: Session) -> None:
-    url = f"https://lib.hanyang.ac.kr/smufu-api/pc/0/rooms-at-seat"
+    url = "https://lib.hanyang.ac.kr/smufu-api/pc/0/rooms-at-seat"
     timeout = ClientTimeout(total=3.0)
     room_items: list[dict] = []
     async with ClientSession(timeout=timeout) as session:
