@@ -8,9 +8,9 @@ from utils.database import get_db_engine
 
 
 class TestFetchReadingRoomData:
-    connection: Engine = None
+    connection: Engine | None = None
     session_constructor = None
-    session: Session = None
+    session: Session | None = None
 
     @classmethod
     async def setup_class(cls):
