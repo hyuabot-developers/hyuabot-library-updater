@@ -67,7 +67,7 @@ jobs:
       POSTGRES_DB: hyuabot
     services:
       postgres:
-        image: postgres:13
+        image: postgres:latest
         env:
           POSTGRES_USER: ${{ env.POSTGRES_ID }}
           POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
