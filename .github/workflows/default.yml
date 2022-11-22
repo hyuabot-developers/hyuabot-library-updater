@@ -94,4 +94,4 @@ jobs:
         python -m pip install -U -r requirements/${REQUIREMENTS_FILE}.txt
     - name: Test with pytest
       run: |
-        python -m pytest -m 'not integration' -v --cov=src
+        python -m pytest -m 'not integration' -v
