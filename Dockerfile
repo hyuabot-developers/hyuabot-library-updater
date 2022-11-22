@@ -1,4 +1,4 @@
-FROM debian:11-slim AS build
+FROM python:3.11-slim-bullseye AS build
 RUN apt-get update && \
     apt-get install --no-install-suggests --no-install-recommends --yes python3-venv gcc libpython3-dev && \
     python3 -m venv /venv && \
@@ -7,6 +7,7 @@ RUN apt-get update && \
 FROM build AS build-venv
 COPY setup.cfg /setup.cfg
 COPY setup.py /setup.py
+COPY src /src
 RUN /venv/bin/pip install --disable-pip-version-check -e /
 
 FROM python:3.11-slim-bullseye AS runtime
