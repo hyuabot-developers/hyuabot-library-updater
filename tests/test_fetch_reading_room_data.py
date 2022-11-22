@@ -1,6 +1,7 @@
 import pytest as pytest
-from sqlalchemy import Engine, insert
+from sqlalchemy import Engine
 from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.dialects.postgresql import insert
 
 from models import Campus, ReadingRoom, BaseModel
 from scripts.realtime import get_realtime_data
@@ -13,8 +14,8 @@ class TestFetchReadingRoomData:
     session: Session | None = None
 
     @classmethod
-    async def setup_class(cls):
-        cls.connection = await get_db_engine()
+    def setup_class(cls):
+        cls.connection = get_db_engine()
         cls.session_constructor = sessionmaker(bind=cls.connection)
         # Database session check
         cls.session = cls.session_constructor()
@@ -22,14 +23,20 @@ class TestFetchReadingRoomData:
         # Migration schema check
         BaseModel.metadata.create_all(cls.connection)
         # Insert campus data
-        cls.session.execute(insert(Campus), [
-            dict(campus_id=1, campus_name="서울"), dict(campus_id=2, campus_name="ERICA")])
+        insert_statement = insert(Campus).values([
+            dict(campus_id=1, campus_name="서울"), dict(campus_id=2, campus_name="ERICA")
+        ])
+        insert_statement = insert_statement.on_conflict_do_update(
+            index_elements=["campus_id"],
+            set_=dict(campus_name=insert_statement.excluded.campus_name),
+        )
+        cls.session.execute(insert_statement)
         cls.session.commit()
         cls.session.close()
 
     @pytest.mark.asyncio
     async def test_fetch_realtime_data(self):
-        connection = await get_db_engine()
+        connection = get_db_engine()
         session_constructor = sessionmaker(bind=connection)
         # Database session check
         session = session_constructor()
