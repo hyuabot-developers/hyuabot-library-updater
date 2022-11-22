@@ -2,3 +2,5 @@
 venv/
 *.pyc
 src/hyuabot_library_updater.egg-info/
+
+.eggs/
