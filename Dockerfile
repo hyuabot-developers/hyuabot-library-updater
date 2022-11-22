@@ -6,9 +6,10 @@ RUN apt-get update && \
 
 FROM build AS build-venv
 COPY setup.cfg /setup.cfg
+COPY setup.py /setup.py
 RUN /venv/bin/pip install --disable-pip-version-check -e /
 
-FROM gcr.io/distroless/python3-debian11
+FROM 3.11.0-slim-bullseye AS runtime
 COPY --from=build-venv /venv /venv
 COPY . /
 WORKDIR /src
