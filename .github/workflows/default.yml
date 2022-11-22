@@ -85,22 +85,6 @@ jobs:
   docker-image-build:
     runs-on: self-hosted
     needs: [test]
-    env:
-      POSTGRES_ID: test
-      POSTGRES_PASSWORD: test
-      POSTGRES_HOST: localhost
-      POSTGRES_PORT: 25432
-      POSTGRES_DB: hyuabot
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: ${{ env.POSTGRES_ID }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ env.POSTGRES_DB }}
-        ports:
-          - 25432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
     - uses: actions/checkout@v3
     - name: Set up Docker Build Environment
