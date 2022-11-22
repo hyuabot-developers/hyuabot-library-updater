@@ -2,11 +2,11 @@ from aiohttp import ClientTimeout, ClientSession
 from sqlalchemy import delete, insert
 from sqlalchemy.orm import Session
 
-from models.reading_room import ReadingRoom
+from models import ReadingRoom
 
 
 async def get_realtime_data(db_session: Session) -> None:
-    url = f"https://lib.hanyang.ac.kr/smufu-api/pc/0/rooms-at-seat"
+    url = "https://lib.hanyang.ac.kr/smufu-api/pc/0/rooms-at-seat"
     timeout = ClientTimeout(total=3.0)
     room_items: list[dict] = []
     async with ClientSession(timeout=timeout) as session:
@@ -25,8 +25,9 @@ async def get_realtime_data(db_session: Session) -> None:
                     occupied=room["occupied"],
                     available=room["available"],
                 ))
-    db_session.execute(delete(ReadingRoom))
-    if room_items:
-        insert_statement = insert(ReadingRoom).values(room_items)
-        db_session.execute(insert_statement)
-    db_session.commit()
+    try:
+        db_session.execute(delete(ReadingRoom))
+    finally:
+        if room_items:
+            db_session.execute(insert(ReadingRoom), room_items)
+        db_session.commit()
