@@ -112,12 +112,3 @@ jobs:
         file: ./Dockerfile
         push: false
         tags: hyuabot/hyuabot-library-updater:latest
-    - name: Run container
-      run: |
-        docker run -e POSTGRES_ID=$POSTGRES_ID -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_HOST=$POSTGRES_HOST -e POSTGRES_PORT=25432 -e POSTGRES_DB=$POSTGRES_DB -d --name hyuabot-library-updater hyuabot/hyuabot-library-updater:latest
-    - name: Wait for container to start
-      run: |
-        docker exec hyuabot-library-updater bash -c "while ! pg_isready -h localhost -p 25432 -U test; do sleep 1; done"
-    - name: Run tests
-      run: |
-        docker exec hyuabot-library-updater bash -c "python -m pytest -m 'integration' -v"
