@@ -24,7 +24,7 @@ class TestFetchReadingRoomData:
         BaseModel.metadata.create_all(cls.connection)
         # Insert campus data
         insert_statement = insert(Campus).values([
-            dict(campus_id=1, campus_name="서울"), dict(campus_id=2, campus_name="ERICA")
+            dict(campus_id=1, campus_name="서울"), dict(campus_id=2, campus_name="ERICA"),
         ])
         insert_statement = insert_statement.on_conflict_do_update(
             index_elements=["campus_id"],
