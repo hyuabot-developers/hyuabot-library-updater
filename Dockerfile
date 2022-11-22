@@ -5,11 +5,11 @@ RUN apt-get update && \
     /venv/bin/pip install --upgrade pip setuptools wheel
 
 FROM build AS build-venv
-COPY requirements.txt /requirements.txt
-RUN /venv/bin/pip install --disable-pip-version-check -r /requirements.txt
+COPY setup.cfg /setup.cfg
+RUN /venv/bin/pip install --disable-pip-version-check -e /
 
 FROM gcr.io/distroless/python3-debian11
 COPY --from=build-venv /venv /venv
-COPY . /app
-WORKDIR /app
+COPY . /
+WORKDIR /src
 ENTRYPOINT ["/venv/bin/python3", "main.py"]
