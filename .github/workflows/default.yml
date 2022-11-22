@@ -85,12 +85,6 @@ jobs:
   docker-image-build:
     runs-on: self-hosted
     needs: [test]
-    env:
-      POSTGRES_ID: test
-      POSTGRES_PASSWORD: test
-      POSTGRES_HOST: localhost
-      POSTGRES_PORT: 25432
-      POSTGRES_DB: hyuabot
     services:
       postgres:
         image: postgres:latest
