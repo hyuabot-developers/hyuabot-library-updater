@@ -2,7 +2,7 @@ from aiohttp import ClientTimeout, ClientSession
 from sqlalchemy import delete, insert
 from sqlalchemy.orm import Session
 
-from models.reading_room import ReadingRoom
+from models import ReadingRoom
 
 
 async def get_realtime_data(db_session: Session) -> None:
