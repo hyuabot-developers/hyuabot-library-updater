@@ -25,7 +25,9 @@ async def get_realtime_data(db_session: Session) -> None:
                     occupied=room["occupied"],
                     available=room["available"],
                 ))
-    db_session.execute(delete(ReadingRoom))
-    if room_items:
-        db_session.execute(insert(ReadingRoom), room_items)
-    db_session.commit()
+    try:
+        db_session.execute(delete(ReadingRoom))
+    finally:
+        if room_items:
+            db_session.execute(insert(ReadingRoom), room_items)
+        db_session.commit()
