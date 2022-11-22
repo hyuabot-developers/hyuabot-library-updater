@@ -2,7 +2,7 @@ import pytest as pytest
 from sqlalchemy import Engine, insert
 from sqlalchemy.orm import sessionmaker, Session
 
-from models import Campus, ReadingRoom
+from models import Campus, ReadingRoom, BaseModel
 from scripts.realtime import get_realtime_data
 from utils.database import get_db_engine
 
@@ -19,6 +19,8 @@ class TestFetchReadingRoomData:
         # Database session check
         cls.session = cls.session_constructor()
         assert cls.session is not None
+        # Migration schema check
+        BaseModel.metadata.create_all(cls.connection)
         # Insert campus data
         cls.session.execute(insert(Campus), [
             dict(campus_id=1, campus_name="서울"), dict(campus_id=2, campus_name="ERICA")])
