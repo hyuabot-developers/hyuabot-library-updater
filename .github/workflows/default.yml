@@ -57,6 +57,7 @@ jobs:
       POSTGRES_HOST: localhost
       POSTGRES_PORT: 25432
       POSTGRES_DB: hyuabot
+      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
     services:
       postgres:
         image: postgres:latest
