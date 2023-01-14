@@ -10,6 +10,7 @@ from models import ReadingRoom
 firebase_key = os.getenv("FIREBASE_TOKEN")
 push_service = FCMNotification(api_key=firebase_key)
 
+
 async def get_realtime_data(db_session: Session) -> None:
     url = "https://lib.hanyang.ac.kr/smufu-api/pc/0/rooms-status"
     timeout = ClientTimeout(total=3.0)
@@ -25,7 +26,7 @@ async def get_realtime_data(db_session: Session) -> None:
                         "title": "열람실 좌석 발견!",
                     }
                     push_service.notify_topic_subscribers(
-                        topic_name=f"reading_room_{room['id']}", data_message=data
+                        topic_name=f"reading_room_{room['id']}", data_message=data,
                     )
                 room_items.append(dict(
                     campus_id=room["branchGroup"]["id"],
