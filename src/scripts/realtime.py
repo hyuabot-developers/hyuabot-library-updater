@@ -13,7 +13,7 @@ push_service = FCMNotification(api_key=firebase_key)
 
 async def get_realtime_data(db_session: Session) -> None:
     url = "https://lib.hanyang.ac.kr/smufu-api/pc/0/rooms-status"
-    timeout = ClientTimeout(total=3.0)
+    timeout = ClientTimeout(total=30)
     room_items: list[dict] = []
     async with ClientSession(timeout=timeout) as session:
         async with session.get(url) as response:
