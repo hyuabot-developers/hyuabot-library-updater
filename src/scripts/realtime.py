@@ -1,3 +1,4 @@
+import datetime
 import os
 
 from aiohttp import ClientTimeout, ClientSession
@@ -15,6 +16,7 @@ async def get_realtime_data(db_session: Session) -> None:
     url = "https://lib.hanyang.ac.kr/smufu-api/pc/0/rooms-status"
     timeout = ClientTimeout(total=30)
     room_items: list[dict] = []
+    now = datetime.datetime.now()
     async with ClientSession(timeout=timeout) as session:
         async with session.get(url) as response:
             response_json = await response.json()
@@ -38,6 +40,7 @@ async def get_realtime_data(db_session: Session) -> None:
                     active_total=room["activeTotal"],
                     occupied=room["occupied"],
                     available=room["available"],
+                    last_updated_time=now,
                 ))
     try:
         db_session.execute(delete(ReadingRoom))
