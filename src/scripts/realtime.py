@@ -39,8 +39,7 @@ async def get_realtime_data(db_session: Session) -> None:
                     total=room["total"],
                     active_total=room["activeTotal"],
                     occupied=room["occupied"],
-                    available=room["available"],
-                    last_updated_time=now,
+                    last_updated_time=now.astimezone(datetime.timezone(datetime.timedelta(hours=9))),
                 ))
     try:
         db_session.execute(delete(ReadingRoom))
