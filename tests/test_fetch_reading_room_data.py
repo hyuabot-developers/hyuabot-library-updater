@@ -45,11 +45,11 @@ class TestFetchReadingRoomData:
         room_query = session.query(ReadingRoom).all()
         for room in room_query:  # type: ReadingRoom
             assert room.campus_id == 1 or room.campus_id == 2
-            assert type(room.room_id) == int
-            assert type(room.room_name) == str
-            assert type(room.is_active) == bool
-            assert type(room.is_reservable) == bool
-            assert type(room.total) == int
-            assert type(room.active_total) == int
-            assert type(room.occupied) == int
-            assert type(room.available) == int
+            assert isinstance(room.room_id, int)
+            assert isinstance(room.room_name, str)
+            assert isinstance(room.is_active, bool)
+            assert isinstance(room.is_reservable, bool)
+            assert isinstance(room.total, int)
+            assert isinstance(room.active_total, int)
+            assert isinstance(room.occupied, int)
+            assert isinstance(room.available, int)
