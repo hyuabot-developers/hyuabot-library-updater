@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import String, PrimaryKeyConstraint, ForeignKey
+from sqlalchemy import String, PrimaryKeyConstraint, ForeignKey, Computed
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -26,7 +26,10 @@ class ReadingRoom(BaseModel):
     total: Mapped[int] = mapped_column(nullable=False)
     active_total: Mapped[int] = mapped_column(nullable=False)
     occupied: Mapped[int] = mapped_column(nullable=False)
-    available: Mapped[int] = mapped_column(nullable=False)
+    available: Mapped[int] = mapped_column(
+        Computed("total - occupied", persisted=True),
+        nullable=False,
+    )
     last_updated_time: Mapped[datetime.datetime] = \
         mapped_column(nullable=False)
     campus: Mapped["Campus"] = relationship(back_populates="reading_rooms")
