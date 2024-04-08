@@ -1,6 +1,9 @@
 name: default
 
-on: [pull_request, push]
+on:
+  push:
+    branches-ignore:
+      - main
 jobs:
   lint:
     runs-on: [self-hosted, X64, Linux]
