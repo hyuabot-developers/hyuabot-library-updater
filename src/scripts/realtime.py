@@ -8,8 +8,11 @@ from sqlalchemy.orm import Session
 
 from models import ReadingRoom
 
-firebase_key = os.getenv("FIREBASE_TOKEN")
-push_service = FCMNotification(api_key=firebase_key)
+google_project_id = os.getenv("GOOGLE_PROJECT_ID")
+push_service = FCMNotification(
+    service_account_file="/tmp/google-service-account.json",
+    project_id=google_project_id,
+)
 
 
 async def get_realtime_data(db_session: Session) -> None:
