@@ -12,6 +12,9 @@ RUN apk add --no-cache --virtual .build-deps gcc libc-dev libxslt-dev libpq-dev 
 
 FROM python:3.12-alpine AS runtime
 
+# Copy GOOGLE_APPLICATION_CREDENTIALS to the container
+COPY google-service-account.json /tmp/google-service-account.json
+
 COPY --from=build /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=build /app /app
 WORKDIR /app/src
