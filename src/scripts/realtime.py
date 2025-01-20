@@ -15,8 +15,7 @@ push_service = FCMNotification(
 )
 
 
-async def get_realtime_data(db_session: Session) -> None:
-    url = "https://lib.hanyang.ac.kr/smufu-api/pc/0/rooms-status"
+async def get_realtime_data(db_session: Session, url: str) -> None:
     timeout = ClientTimeout(total=30)
     room_items: list[dict] = []
     now = datetime.datetime.now()
@@ -25,9 +24,10 @@ async def get_realtime_data(db_session: Session) -> None:
             response_json = await response.json()
             room_list = response_json["data"]["list"]
             for room in room_list:
-                if room["available"] > 0:
+                seats = room["seats"]
+                if seats["available"] > 0:
                     data = {
-                        "body": f"{room['name']}에 좌석이 {room['available']}개 남았습니다.",
+                        "body": f"{room['name']}에 좌석이 {seats['available']}개 남았습니다.",
                         "title": "열람실 좌석 발견!",
                     }
                     push_service.notify(
@@ -35,14 +35,14 @@ async def get_realtime_data(db_session: Session) -> None:
                         data_payload=data,
                     )
                 room_items.append(dict(
-                    campus_id=room["branchGroup"]["id"],
+                    campus_id=room["branch"]["id"],
                     room_id=room["id"],
                     room_name=room["name"],
-                    is_active=room["isActive"],
-                    is_reservable=room["isReservable"],
-                    total=room["total"],
-                    active_total=room["activeTotal"],
-                    occupied=room["occupied"],
+                    is_active=room["unableMessage"] is None,
+                    is_reservable=room["unableMessage"] is None,
+                    total=seats["total"],
+                    active_total=seats["total"],
+                    occupied=seats["occupied"],
                     last_updated_time=now.astimezone(datetime.timezone(datetime.timedelta(hours=9))),
                 ))
     try:

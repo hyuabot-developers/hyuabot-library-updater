@@ -23,7 +23,11 @@ async def main():
 
 
 async def execute_script(session):
-    job_list = [get_realtime_data(session)]
+    url_list = [
+        "https://library.hanyang.ac.kr/pyxis-api/1/seat-rooms?smufMethodCode=PC&branchGroupId=1",
+        "https://library.hanyang.ac.kr/pyxis-api/2/seat-rooms?smufMethodCode=PC&branchGroupId=2",
+    ]
+    job_list = [get_realtime_data(session, url) for url in url_list]
     await asyncio.gather(*job_list)
     session.close()
 
