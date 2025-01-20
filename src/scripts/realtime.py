@@ -15,13 +15,26 @@ push_service = FCMNotification(
 )
 
 
-async def get_realtime_data(db_session: Session, url: str) -> None:
+async def get_branches() -> dict[int, int]:
+    url = "https://library.hanyang.ac.kr/pyxis-api/1/branches"
     timeout = ClientTimeout(total=30)
-    room_items: list[dict] = []
-    now = datetime.datetime.now()
     async with ClientSession(timeout=timeout) as session:
         async with session.get(url) as response:
             response_json = await response.json()
+            branch_list = response_json["data"]["list"]
+            return {branch["id"]: branch["branchGroup"]["id"] for branch in branch_list}
+
+
+async def get_realtime_data(db_session: Session, campus_id: int) -> None:
+    timeout = ClientTimeout(total=30)
+    room_items: list[dict] = []
+    now = datetime.datetime.now()
+    url = f"https://library.hanyang.ac.kr/pyxis-api/{campus_id}/seat-rooms?smufMethodCode=PC&branchGroupId={campus_id}"
+    async with ClientSession(timeout=timeout) as session:
+        async with session.get(url) as response:
+            response_json = await response.json()
+            if response_json.get("data") is None:
+                return
             room_list = response_json["data"]["list"]
             for room in room_list:
                 seats = room["seats"]
@@ -35,7 +48,7 @@ async def get_realtime_data(db_session: Session, url: str) -> None:
                         data_payload=data,
                     )
                 room_items.append(dict(
-                    campus_id=room["branch"]["id"],
+                    campus_id=campus_id,
                     room_id=room["id"],
                     room_name=room["name"],
                     is_active=room["unableMessage"] is None,
