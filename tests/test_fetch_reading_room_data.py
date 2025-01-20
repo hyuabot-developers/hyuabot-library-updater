@@ -40,7 +40,12 @@ class TestFetchReadingRoomData:
         session_constructor = sessionmaker(bind=connection)
         # Database session check
         session = session_constructor()
-        await get_realtime_data(session)
+        url_list = [
+            "https://library.hanyang.ac.kr/pyxis-api/1/seat-rooms?smufMethodCode=PC&branchGroupId=1",
+            "https://library.hanyang.ac.kr/pyxis-api/2/seat-rooms?smufMethodCode=PC&branchGroupId=2",
+        ]
+        for url in url_list:
+            await get_realtime_data(session, url)
         # Check if the data is inserted
         room_query = session.query(ReadingRoom).all()
         for room in room_query:  # type: ReadingRoom
