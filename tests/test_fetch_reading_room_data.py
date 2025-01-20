@@ -40,7 +40,9 @@ class TestFetchReadingRoomData:
         session_constructor = sessionmaker(bind=connection)
         # Database session check
         session = session_constructor()
-        await get_realtime_data(session)
+        campus_list = [1, 2]
+        for campus_id in campus_list:
+            await get_realtime_data(session, campus_id)
         # Check if the data is inserted
         room_query = session.query(ReadingRoom).all()
         for room in room_query:  # type: ReadingRoom
