@@ -3,7 +3,7 @@ import os
 
 from aiohttp import ClientTimeout, ClientSession
 from pyfcm import FCMNotification
-from sqlalchemy import delete, insert
+from sqlalchemy import insert
 from sqlalchemy.orm import Session
 
 from models import ReadingRoom
@@ -58,9 +58,6 @@ async def get_realtime_data(db_session: Session, campus_id: int) -> None:
                     occupied=seats["occupied"],
                     last_updated_time=now.astimezone(datetime.timezone(datetime.timedelta(hours=9))),
                 ))
-    try:
-        db_session.execute(delete(ReadingRoom))
-    finally:
-        if room_items:
-            db_session.execute(insert(ReadingRoom), room_items)
-        db_session.commit()
+    if room_items:
+        db_session.execute(insert(ReadingRoom), room_items)
+    db_session.commit()
