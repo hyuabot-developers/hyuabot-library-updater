@@ -51,7 +51,7 @@ async def get_realtime_data(db_session: Session, campus_id: int) -> None:
                     campus_id=campus_id,
                     room_id=room["id"],
                     room_name=room["name"],
-                    is_active=room["unableMessage"] is None,
+                    is_active=True,
                     is_reservable=room["unableMessage"] is None,
                     total=seats["total"],
                     active_total=seats["total"],
