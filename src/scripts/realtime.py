@@ -42,6 +42,8 @@ async def get_realtime_data(db_session: Session, campus_id: int) -> None:
                     data = {
                         "body": f"{room['name']}에 좌석이 {seats['available']}개 남았습니다.",
                         "title": "열람실 좌석 발견!",
+                        "id": f'reading_room_{room["id"]}',
+                        "available": str(seats['total'] - seats['occupied']),
                     }
                     push_service.notify(
                         topic_name=f"reading_room_{room['id']}",
