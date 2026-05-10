@@ -1,4 +1,4 @@
-name: default
+name: Code Check and Test
 
 on:
   push:
