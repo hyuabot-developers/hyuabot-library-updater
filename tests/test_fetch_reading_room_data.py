@@ -8,6 +8,7 @@ from scripts.realtime import get_realtime_data
 from utils.database import get_db_engine
 
 
+@pytest.mark.integration
 class TestFetchReadingRoomData:
     connection: Engine | None = None
     session_constructor = None
