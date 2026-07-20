@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 jobs:
   docker-image-build:
-    runs-on: [ self-hosted, ARM64, Linux ]
+    runs-on: [ self-hosted, ARM64, Linux, 1st ]
     env:
       IMAGE_NAME: localhost:5000/hyuabot-library-updater:latest
     steps:
@@ -29,6 +29,10 @@ jobs:
       - name: Push docker image
         run: |
           docker push ${{ env.IMAGE_NAME }}
+      - name: Sync image to worker registry
+        uses: hyuabot-developers/hyuabot-infrastructure/.github/actions/sync-local-registry@a091ea37f391ae60eb7828325782a397cc7cae9c
+        with:
+          image: ${{ env.IMAGE_NAME }}
       - name: Remove docker image
         run: |
           docker rmi ${{ env.IMAGE_NAME }}
