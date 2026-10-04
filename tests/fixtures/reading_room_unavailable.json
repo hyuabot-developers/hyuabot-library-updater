@@ -1,0 +1,6 @@
+{
+  "id": 51,
+  "name": "제1열람실",
+  "unableMessage": "점검 중",
+  "seats": { "total": 100, "occupied": 35, "available": 65 }
+}
