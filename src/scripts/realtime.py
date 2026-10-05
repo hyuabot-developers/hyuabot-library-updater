@@ -80,6 +80,22 @@ async def get_branches() -> dict[int, int]:
     return {branch["id"]: branch["branchGroup"]["id"] for branch in branch_list}
 
 
+def reading_room_item(room: dict[str, Any], campus_id: int, now: datetime.datetime) -> dict[str, Any]:
+    seats = room["seats"]
+    return {
+        "campus_id": campus_id,
+        "room_id": room["id"],
+        "room_name": room["name"],
+        "is_active": True,
+        "is_reservable": room.get("unableMessage") is None,
+        "unable_message": room.get("unableMessage"),
+        "total": seats["total"],
+        "active_total": seats["total"],
+        "occupied": seats["occupied"],
+        "last_updated_time": now.astimezone(datetime.timezone(datetime.timedelta(hours=9))),
+    }
+
+
 async def get_realtime_data(db_session: Session, campus_id: int) -> None:
     room_items: list[dict] = []
     now = datetime.datetime.now()
@@ -101,17 +117,7 @@ async def get_realtime_data(db_session: Session, campus_id: int) -> None:
                 topic_name=f"reading_room_{room['id']}",
                 data_payload=data,
             )
-        room_items.append(dict(
-            campus_id=campus_id,
-            room_id=room["id"],
-            room_name=room["name"],
-            is_active=True,
-            is_reservable=room["unableMessage"] is None,
-            total=seats["total"],
-            active_total=seats["total"],
-            occupied=seats["occupied"],
-            last_updated_time=now.astimezone(datetime.timezone(datetime.timedelta(hours=9))),
-        ))
+        room_items.append(reading_room_item(room, campus_id, now))
     if room_items:
         db_session.execute(insert(ReadingRoom), room_items)
     db_session.commit()

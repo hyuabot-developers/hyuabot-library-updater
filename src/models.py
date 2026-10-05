@@ -23,6 +23,7 @@ class ReadingRoom(BaseModel):
     room_name: Mapped[str] = mapped_column(nullable=False)
     is_active: Mapped[bool] = mapped_column(nullable=False)
     is_reservable: Mapped[bool] = mapped_column(nullable=False)
+    unable_message: Mapped[str | None] = mapped_column(String(255), nullable=True)
     total: Mapped[int] = mapped_column(nullable=False)
     active_total: Mapped[int] = mapped_column(nullable=False)
     occupied: Mapped[int] = mapped_column(nullable=False)
